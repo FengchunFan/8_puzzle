@@ -1,6 +1,6 @@
 # 8_puzzle
 
-program that solves the eight-puzzle. You will solve it using 
+program that solves the eight-puzzle using:
 
 1) Uniform Cost Search1
 
