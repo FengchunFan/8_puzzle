@@ -1,6 +1,11 @@
 # will build the project based on x, y coordinates
 # operators will be based on how 0 moves, thus 4 possible options
 
+# this following puzzle will be used for default goal state
+# [[1, 2, 3]]    [[(0,0), (0,1), (0,2)]]
+# [[4, 5, 6]] == [[(1,0), (1,1), (1,2)]]
+# [[7, 8, 0]]    [[(2,0), (2,1), (2,2)]]
+
 # default 3 x 3 puzzle
 def print_puzzle(puzzle):
     for i in range(3):
