@@ -21,6 +21,23 @@ def get_row(row_input):
             row.append(index)
     return row
 
+# 4 operators up, down, left, right. But all requires to know 0's position first
+
+def find_zero(puzzle):
+    print()
+
+def zero_up(puzzle):
+    print()
+
+def zero_down(puzzle):
+    print()
+
+def zero_left(puzzle):
+    print()
+
+def zero_right(puzzle):
+    print()
+
 # Uniform Cost Search
 def algo_1(puzzle):
     print("You have chosen the Uniform Cost Search algorithm")
