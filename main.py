@@ -1,7 +1,7 @@
-#will build the project based on x, y coordinates
-#operators will be based on how 0 moves, thus 4 possible options
+# will build the project based on x, y coordinates
+# operators will be based on how 0 moves, thus 4 possible options
 
-#default 3 x 3 puzzle
+# default 3 x 3 puzzle
 def print_puzzle(puzzle):
     for i in range(3):
         for j in range(3):
@@ -14,6 +14,18 @@ def get_row(row_input):
         if index.isdigit():
             row.append(index)
     return row
+
+# Uniform Cost Search
+def algo_1(puzzle):
+    print("You have chosen the Uniform Cost Search algorithm")
+
+# A* with the Misplaced Tile heuristic
+def algo_2(puzzle):
+    print("You have chosen the A* with the Misplaced Tile heuristic algorithm")
+
+# A* with the Euclidean distance heuristic
+def algo_3(puzzle):
+    print("You have chosen the A* with the Euclidean distance heuristic algorithm")
 
 print("Welcome to the 8 puzzle solver")
 print("Type “1” to use a default puzzle, or “2” to enter your own puzzle")
@@ -44,4 +56,21 @@ elif(puzzle_option == "2"):
     puzzle.append(get_row(row_input))
     print_puzzle(puzzle)
 
-#up to this point, the initial puzzle should be formed
+# up to this point, the initial puzzle should be formed
+print("Enter your choice of algorithm")
+print("1. Uniform Cost Search")
+print("2. A* with the Misplaced Tile heuristic")
+print("3. A* with the Euclidean distance heuristic")
+
+algorithm_option = input()
+
+while(algorithm_option != "1" and algorithm_option != "2" and algorithm_option != "3"):
+    print("Please enter a valid option")
+    algorithm_option = input()
+
+if(algorithm_option == "1"):
+    algo_1(puzzle)
+elif(algorithm_option == "2"):
+    algo_2(puzzle)
+elif(algorithm_option == "3"):
+    algo_3(puzzle)
