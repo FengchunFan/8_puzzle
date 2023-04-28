@@ -8,6 +8,7 @@
 
 # default 3 x 3 puzzle
 def print_puzzle(puzzle):
+    print("This will be your starting puzzle: ")
     for i in range(3):
         for j in range(3):
             print(puzzle[i][j], end = " ") #use end = " " to prevent duplicated newlines
@@ -44,7 +45,6 @@ while(puzzle_option != "1" and puzzle_option != "2"):
 
 if(puzzle_option == "1"):
     #default
-    print("Here is a default puzzle")
     puzzle = [[1, 2, 3],[4, 8, 0],[7, 6, 5]]
     print_puzzle(puzzle)
 elif(puzzle_option == "2"):
