@@ -24,19 +24,50 @@ def get_row(row_input):
 # 4 operators up, down, left, right. But all requires to know 0's position first
 
 def find_zero(puzzle):
-    print()
+    for i in range (3):
+        for j in range (3):
+            if puzzle[i][j] == 0:
+                return i,j
 
 def zero_up(puzzle):
-    print()
+    i, j = find_zero(puzzle)
+    if (i == 0):
+        return puzzle # no change
+    else:
+        temp = puzzle[i-1][j]
+        puzzle[i-1][j] = 0
+        puzzle[i][j] = temp
+        return puzzle
 
 def zero_down(puzzle):
-    print()
+    i, j = find_zero(puzzle)
+    if (i == 2):
+        return puzzle # no change
+    else:
+        temp = puzzle[i+1][j]
+        puzzle[i+1][j] = 0
+        puzzle[i][j] = temp
+        return puzzle
 
 def zero_left(puzzle):
-    print()
+    i, j = find_zero(puzzle)
+    if (j == 0):
+        return puzzle # no change
+    else:
+        temp = puzzle[i][j-1]
+        puzzle[i][j-1] = 0
+        puzzle[i][j] = temp
+        return puzzle
 
 def zero_right(puzzle):
-    print()
+    i, j = find_zero(puzzle)
+    if (j == 2):
+        return puzzle # no change
+    else:
+        temp = puzzle[i][j+1]
+        puzzle[i][j+1] = 0
+        puzzle[i][j] = temp
+        return puzzle
 
 # Uniform Cost Search
 def algo_1(puzzle):
@@ -96,3 +127,24 @@ elif(algorithm_option == "2"):
     algo_2(puzzle)
 elif(algorithm_option == "3"):
     algo_3(puzzle)
+
+print("Input 1: up, 2: down, 3: left, 4: right, 5: exit")
+print_puzzle(puzzle)
+temp_option = input()
+while(temp_option != "5"):
+    if (temp_option == "1"):
+        puzzle = zero_up(puzzle)
+        print_puzzle(puzzle)
+        temp_option = input()
+    if (temp_option == "2"):
+        puzzle = zero_down(puzzle)
+        print_puzzle(puzzle)
+        temp_option = input()
+    if (temp_option == "3"):
+        puzzle = zero_left(puzzle)
+        print_puzzle(puzzle)
+        temp_option = input()
+    if (temp_option == "4"):
+        puzzle = zero_right(puzzle)
+        print_puzzle(puzzle)
+        temp_option = input()
