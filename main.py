@@ -6,6 +6,15 @@
 # [[4, 5, 6]] == [[(1,0), (1,1), (1,2)]]
 # [[7, 8, 0]]    [[(2,0), (2,1), (2,2)]]
 
+from queue import PriorityQueue #essential for algorithms
+
+# define a Node class to keep track of path used, should have a type puzzle and a puzzle pointer
+class Node:
+    def __init__(self, puzzle, parent, cost):
+        self.puzzle = puzzle
+        self.parent = parent
+        self.cost = cost
+
 # default 3 x 3 puzzle
 def print_puzzle(puzzle):
     print("This will be your starting puzzle: ")
@@ -72,6 +81,7 @@ def zero_right(puzzle):
 # Uniform Cost Search
 def algo_1(puzzle):
     print("You have chosen the Uniform Cost Search algorithm")
+
 
 # A* with the Misplaced Tile heuristic
 def algo_2(puzzle):
