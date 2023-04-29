@@ -44,7 +44,7 @@ def find_zero(puzzle):
 def zero_up(puzzle):
     i, j = find_zero(puzzle)
     if (i == '0'):
-        new_puzzle = copy.deepcopy(puzzle)
+        new_puzzle = copy.deepcopy(puzzle) #need to make a hard copy other than referencing back to the input puzzle
         return new_puzzle # no change
     else:
         new_puzzle = copy.deepcopy(puzzle)
