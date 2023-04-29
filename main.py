@@ -101,11 +101,11 @@ def algo_1(puzzle):
     
     #test purpose
     new_puzzle = zero_left(puzzle)
-    second_node = Node(new_puzzle, puzzle, 1)
+    second_node = Node(new_puzzle, start_node, 1)
     q.put(second_node)
 
     new_new_puzzle = zero_left(new_puzzle)
-    third_node = Node(new_new_puzzle, new_puzzle, 1)
+    third_node = Node(new_new_puzzle, second_node, 1)
     q.put(third_node)
 
     while not q.empty(): 
