@@ -7,6 +7,7 @@
 # [[7, 8, 0]]    [[(2,0), (2,1), (2,2)]]
 
 from queue import PriorityQueue #essential for algorithms
+import copy
 
 # define a Node class to keep track of path used, should have a type puzzle and a puzzle pointer
 class Node:
@@ -15,9 +16,11 @@ class Node:
         self.parent = parent
         self.cost = cost
 
+    def __lt__(self, other): # very very important, used for comparison for the priority queue, lower cost = higher priority
+        return self.cost < other.cost
+
 # default 3 x 3 puzzle
 def print_puzzle(puzzle):
-    print("This will be your starting puzzle: ")
     for i in range(3):
         for j in range(3):
             print(puzzle[i][j], end = " ") #use end = " " to prevent duplicated newlines
@@ -35,53 +38,80 @@ def get_row(row_input):
 def find_zero(puzzle):
     for i in range (3):
         for j in range (3):
-            if puzzle[i][j] == 0:
-                return i,j
+            if puzzle[i][j] == '0':
+                return i, j
 
 def zero_up(puzzle):
     i, j = find_zero(puzzle)
-    if (i == 0):
-        return puzzle # no change
+    if (i == '0'):
+        new_puzzle = copy.deepcopy(puzzle)
+        return new_puzzle # no change
     else:
+        new_puzzle = copy.deepcopy(puzzle)
         temp = puzzle[i-1][j]
-        puzzle[i-1][j] = 0
-        puzzle[i][j] = temp
-        return puzzle
+        new_puzzle[i-1][j] = '0'
+        new_puzzle[i][j] = temp
+        return new_puzzle
 
 def zero_down(puzzle):
     i, j = find_zero(puzzle)
-    if (i == 2):
-        return puzzle # no change
+    if (i == '2'):
+        new_puzzle = copy.deepcopy(puzzle)
+        return new_puzzle # no change
     else:
+        new_puzzle = copy.deepcopy(puzzle)
         temp = puzzle[i+1][j]
-        puzzle[i+1][j] = 0
-        puzzle[i][j] = temp
-        return puzzle
+        new_puzzle[i+1][j] = '0'
+        new_puzzle[i][j] = temp
+        return new_puzzle
 
 def zero_left(puzzle):
     i, j = find_zero(puzzle)
-    if (j == 0):
-        return puzzle # no change
+    if (j == '0'):
+        new_puzzle = copy.deepcopy(puzzle)
+        return new_puzzle # no change
     else:
+        new_puzzle = copy.deepcopy(puzzle)
         temp = puzzle[i][j-1]
-        puzzle[i][j-1] = 0
-        puzzle[i][j] = temp
-        return puzzle
+        new_puzzle[i][j-1] = '0'
+        new_puzzle[i][j] = temp
+        return new_puzzle
 
 def zero_right(puzzle):
     i, j = find_zero(puzzle)
-    if (j == 2):
-        return puzzle # no change
+    if (j == '2'):
+        new_puzzle = copy.deepcopy(puzzle)
+        return new_puzzle # no change
     else:
+        new_puzzle = copy.deepcopy(puzzle)
         temp = puzzle[i][j+1]
-        puzzle[i][j+1] = 0
-        puzzle[i][j] = temp
-        return puzzle
+        new_puzzle[i][j+1] = '0'
+        new_puzzle[i][j] = temp
+        return new_puzzle
 
 # Uniform Cost Search
+# reference: https://www.geeksforgeeks.org/priority-queue-using-queue-and-heapdict-module-in-python/
 def algo_1(puzzle):
     print("You have chosen the Uniform Cost Search algorithm")
+    goal = [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '0']] #set the goal state
+    start_node = Node(puzzle, None, 0) #use the input puzzle to initialize the start node
+    q = PriorityQueue()  #create priority queue
+    q.put(start_node) #add start_node to the start of the priority queue
+    visited_node = [] #add a array to store visited nodes
+    
+    #test purpose
+    new_puzzle = zero_left(puzzle)
+    second_node = Node(new_puzzle, puzzle, 1)
+    q.put(second_node)
 
+    new_new_puzzle = zero_left(new_puzzle)
+    third_node = Node(new_new_puzzle, new_puzzle, 1)
+    q.put(third_node)
+
+    while not q.empty(): 
+        print("q not empty")
+        print_puzzle(q.get().puzzle)
+    print("Goal state could not be reached.") #end of the queue has been reached and still not found goal state
 
 # A* with the Misplaced Tile heuristic
 def algo_2(puzzle):
@@ -103,7 +133,8 @@ while(puzzle_option != "1" and puzzle_option != "2"):
 
 if(puzzle_option == "1"):
     #default
-    puzzle = [[1, 2, 3],[4, 8, 0],[7, 6, 5]]
+    puzzle = [['1', '2', '3'],['4', '8', '0'],['7', '6', '5']]
+    print("This will be your starting puzzle:")
     print_puzzle(puzzle)
 elif(puzzle_option == "2"):
     #customized puzzle, but does not check legitimacy of the puzzle
@@ -117,6 +148,7 @@ elif(puzzle_option == "2"):
     print("Enter the third row, use space or tabs between numbers")
     row_input = input()
     puzzle.append(get_row(row_input))
+    print("This will be your starting puzzle:")
     print_puzzle(puzzle)
 
 # up to this point, the initial puzzle should be formed
@@ -138,6 +170,7 @@ elif(algorithm_option == "2"):
 elif(algorithm_option == "3"):
     algo_3(puzzle)
 
+'''
 print("Input 1: up, 2: down, 3: left, 4: right, 5: exit")
 print_puzzle(puzzle)
 temp_option = input()
@@ -158,3 +191,4 @@ while(temp_option != "5"):
         puzzle = zero_right(puzzle)
         print_puzzle(puzzle)
         temp_option = input()
+'''
