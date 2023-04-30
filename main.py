@@ -37,7 +37,7 @@ def get_row(row_input):
     return row
 
 # 4 operators up, down, left, right. But all requires to know 0's position first
-
+# helper function to find where digit lays in the puzzle, type is string btw
 def find_zero(puzzle):
     for i in range (3):
         for j in range (3):
@@ -98,9 +98,10 @@ def zero_right(puzzle):
         new_puzzle[i][j] = temp
         return new_puzzle
 
+#print optimal(hopefully) path
 def print_path(node):
     path = []
-    temp_node = node #reference the node, we don't want to make changes to the passed in node
+    temp_node = node #reference the node, we don't want to make changes to the passed-in node
     while temp_node is not None:
         path.append(temp_node.puzzle)
         temp_node = temp_node.parent
