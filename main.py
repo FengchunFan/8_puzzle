@@ -8,6 +8,7 @@
 
 from queue import PriorityQueue #essential for algorithms
 import copy
+import math #for euclidean distance
 
 # define a Node class to keep track of path used, should have a type puzzle and a node pointer
 class Node:
@@ -120,6 +121,15 @@ def misplace_tile_score(puzzle, goal):
         total += temp
     return total
 
+def Euclidean_Distance(puzzle, goal):
+    total = 0
+    for digit in range(0,8):
+        i_p, j_p = find_digit(puzzle,str(digit))
+        i_g, j_g = find_digit(goal,str(digit))
+        temp = math.sqrt((i_p - i_g)**2 + (j_p - j_g)**2)
+        total += temp
+    return total
+
 # Uniform Cost Search: expanding cheapest cost node, depends on g(n) only, h(n) = 0
 # reference: https://www.geeksforgeeks.org/priority-queue-using-queue-and-heapdict-module-in-python/
 def algo_1(puzzle):
@@ -198,12 +208,47 @@ def algo_2(puzzle):
     print("Goal state could not be reached.") #end of the queue has been reached and still not found goal state
     print("The search algorithm expanded a total of", expanded_nodes, "nodes")
     print("The maximum number of nodes in the queue at one time is", maximum_nodes)
-
     return None
 
-# A* with the Euclidean distance heuristic
+# A* with the Euclidean distance heuristic, similar to algo 2, just change the h(n) function
 def algo_3(puzzle):
     print("You have chosen the A* with the Euclidean distance heuristic algorithm")
+    maximum_nodes = 0 #maximum nodes in q at 1 time
+    expanded_nodes = 0 #total nodes expanded
+    goal = [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '0']] #set the goal state
+    start_node = Node(puzzle, None, 0, 0) #use the input puzzle to initialize the start node
+    q = PriorityQueue()  #create priority queue
+    q.put(start_node) #add start_node to the start of the priority queue
+    visited_node = [] #add a array to store visited nodes
+
+    while not q.empty(): 
+        if(q.qsize() > maximum_nodes):
+            maximum_nodes = q.qsize()
+        temp_node = q.get() #get the first node off priority queue
+        temp_puzzle = temp_node.puzzle #get the puzzle from the node at starting of priority queue
+        #uncomment to see the process
+        print("The best state to expand with g(n) =", temp_node.gcost, "and h(n) =", temp_node.hcost)
+        print_puzzle(temp_puzzle)
+        if(temp_puzzle == goal): #check if is goal
+            print("Goal state was reached")
+            print_path(temp_node)
+            print("The search algorithm expanded a total of", expanded_nodes, "nodes")
+            print("The maximum number of nodes in the queue at one time is", maximum_nodes)
+            return None #break out of the loop
+        possible_moves = [zero_up(temp_puzzle), zero_down(temp_puzzle), zero_left(temp_puzzle), zero_right(temp_puzzle)] #4 operators
+        for moves in possible_moves:
+            if moves != temp_puzzle: #if there is update in the puzzle, i.e: move is valid
+                if moves not in visited_node:
+                    expanded_nodes += 1
+                    h_n = Euclidean_Distance(temp_puzzle, goal)
+                    curr_node = Node(moves, temp_node, temp_node.gcost + 1, temp_node.hcost + h_n)
+                    q.put(curr_node)
+                    visited_node.append(moves)
+
+    print("Goal state could not be reached.") #end of the queue has been reached and still not found goal state
+    print("The search algorithm expanded a total of", expanded_nodes, "nodes")
+    print("The maximum number of nodes in the queue at one time is", maximum_nodes)
+    return None
 
 print("Welcome to the 8 puzzle solver")
 print("Type “1” to use a default puzzle, or “2” to enter your own puzzle")
