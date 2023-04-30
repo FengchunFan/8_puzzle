@@ -97,10 +97,11 @@ def print_path(node):
         path.append(temp_node.puzzle)
         temp_node = temp_node.parent
     path.reverse() #need to reverse order to display start -> goal
-    print("======================================================")
+    print("===========")
     for puzzles in path:
         print_puzzle(puzzles)
-        print("======================================================") #puzzle separater
+        print("===========") #puzzle separater
+    print("The depth of the goal node was: ", len(path)-1) #depth start with first expansion, -1 for initial puzzle
 
 
 # Uniform Cost Search: expanding cheapest cost node, depends on g(n) only
