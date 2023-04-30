@@ -103,7 +103,7 @@ def algo_1(puzzle):
         temp_node = q.get() #get the first node off priority queue
         temp_puzzle = temp_node.puzzle #get the puzzle from the node at starting of priority queue
         #print_puzzle(temp_puzzle)
-        if(puzzle == goal): #check if is goal
+        if(temp_puzzle == goal): #check if is goal
             print("Goal state was reached")
             return None #break out of the loop
         possible_moves = [zero_up(temp_puzzle), zero_down(temp_puzzle), zero_left(temp_puzzle), zero_right(temp_puzzle)] #4 operators
