@@ -9,7 +9,7 @@
 from queue import PriorityQueue #essential for algorithms
 import copy
 
-# define a Node class to keep track of path used, should have a type puzzle and a puzzle pointer
+# define a Node class to keep track of path used, should have a type puzzle and a node pointer
 class Node:
     def __init__(self, puzzle, parent, cost):
         self.puzzle = puzzle
@@ -89,6 +89,18 @@ def zero_right(puzzle):
         new_puzzle[i][j] = temp
         return new_puzzle
 
+def print_path(node):
+    path = []
+    temp_node = node #reference the node, we don't want to make changes to the passed in node
+    while temp_node is not None:
+        path.append(temp_node.puzzle)
+        temp_node = temp_node.parent
+    path.reverse() #need to reverse order to display start -> goal
+    for puzzles in path:
+        print_puzzle(puzzles)
+        print() #leave a blank space
+
+
 # Uniform Cost Search
 # reference: https://www.geeksforgeeks.org/priority-queue-using-queue-and-heapdict-module-in-python/
 def algo_1(puzzle):
@@ -105,12 +117,13 @@ def algo_1(puzzle):
         #print_puzzle(temp_puzzle)
         if(temp_puzzle == goal): #check if is goal
             print("Goal state was reached")
+            print_path(temp_node)
             return None #break out of the loop
         possible_moves = [zero_up(temp_puzzle), zero_down(temp_puzzle), zero_left(temp_puzzle), zero_right(temp_puzzle)] #4 operators
         for moves in possible_moves:
             if moves != temp_puzzle: #if there is update in the puzzle, i.e: move is valid
                 if moves not in visited_node:
-                    curr_node = Node(moves, temp_puzzle, temp_node.cost + 1)
+                    curr_node = Node(moves, temp_node, temp_node.cost + 1)
                     q.put(curr_node)
                     visited_node.append(moves)
 
