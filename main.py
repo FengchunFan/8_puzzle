@@ -43,7 +43,7 @@ def find_zero(puzzle):
 
 def zero_up(puzzle):
     i, j = find_zero(puzzle)
-    if (i == '0'):
+    if (i == 0):
         new_puzzle = copy.deepcopy(puzzle) #need to make a hard copy other than referencing back to the input puzzle
         return new_puzzle # no change
     else:
@@ -55,7 +55,7 @@ def zero_up(puzzle):
 
 def zero_down(puzzle):
     i, j = find_zero(puzzle)
-    if (i == '2'):
+    if (i == 2):
         new_puzzle = copy.deepcopy(puzzle)
         return new_puzzle # no change
     else:
@@ -67,7 +67,7 @@ def zero_down(puzzle):
 
 def zero_left(puzzle):
     i, j = find_zero(puzzle)
-    if (j == '0'):
+    if (j == 0):
         new_puzzle = copy.deepcopy(puzzle)
         return new_puzzle # no change
     else:
@@ -79,7 +79,7 @@ def zero_left(puzzle):
 
 def zero_right(puzzle):
     i, j = find_zero(puzzle)
-    if (j == '2'):
+    if (j == 2):
         new_puzzle = copy.deepcopy(puzzle)
         return new_puzzle # no change
     else:
@@ -100,11 +100,18 @@ def algo_1(puzzle):
     visited_node = [] #add a array to store visited nodes
 
     while not q.empty(): 
-        temp_puzzle = q.get().puzzle #get the puzzle from the node at starting of priority queue
+        temp_node = q.get() #get the first node off priority queue
+        temp_puzzle = temp_node.puzzle #get the puzzle from the node at starting of priority queue
         print_puzzle(temp_puzzle)
-        if(puzzle == goal):
+        if(puzzle == goal): #check if is goal
             print("Goal state was reached")
             return None #break out of the loop
+        possible_moves = [zero_up(temp_puzzle), zero_down(temp_puzzle), zero_left(temp_puzzle), zero_right(temp_puzzle)] #4 operators
+        for moves in possible_moves:
+            if moves != temp_puzzle: #if there is update in the puzzle, i.e: move is valid
+                curr_node = Node(moves, temp_puzzle, temp_node.cost + 1)
+                q.put(curr_node)
+
     print("Goal state could not be reached.") #end of the queue has been reached and still not found goal state
 
 # A* with the Misplaced Tile heuristic
