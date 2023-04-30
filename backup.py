@@ -101,13 +101,15 @@ def print_path(node):
     for puzzles in path:
         print_puzzle(puzzles)
         print("===========") #puzzle separater
-    print("The depth of the goal node was: ", len(path)-1) #depth start with first expansion, -1 for initial puzzle
+    print("The depth of the goal node was:", len(path)-1) #depth start with first expansion, -1 for initial puzzle
 
 
 # Uniform Cost Search: expanding cheapest cost node, depends on g(n) only
 # reference: https://www.geeksforgeeks.org/priority-queue-using-queue-and-heapdict-module-in-python/
 def algo_1(puzzle):
     print("You have chosen the Uniform Cost Search algorithm")
+    maximum_nodes = 0 #maximum nodes in q at 1 time
+    expanded_nodes = 0 #total nodes expanded
     goal = [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '0']] #set the goal state
     start_node = Node(puzzle, None, 0) #use the input puzzle to initialize the start node
     q = PriorityQueue()  #create priority queue
@@ -115,22 +117,30 @@ def algo_1(puzzle):
     visited_node = [] #add a array to store visited nodes
 
     while not q.empty(): 
+        if(q.qsize() > maximum_nodes):
+            maximum_nodes = q.qsize()
         temp_node = q.get() #get the first node off priority queue
         temp_puzzle = temp_node.puzzle #get the puzzle from the node at starting of priority queue
         #print_puzzle(temp_puzzle)
         if(temp_puzzle == goal): #check if is goal
             print("Goal state was reached")
             print_path(temp_node)
+            print("The search algorithm expanded a total of", expanded_nodes, "nodes")
+            print("The maximum number of nodes in the queue at one time is", maximum_nodes)
             return None #break out of the loop
         possible_moves = [zero_up(temp_puzzle), zero_down(temp_puzzle), zero_left(temp_puzzle), zero_right(temp_puzzle)] #4 operators
         for moves in possible_moves:
             if moves != temp_puzzle: #if there is update in the puzzle, i.e: move is valid
                 if moves not in visited_node:
+                    expanded_nodes += 1
                     curr_node = Node(moves, temp_node, temp_node.cost + 1)
                     q.put(curr_node)
                     visited_node.append(moves)
 
     print("Goal state could not be reached.") #end of the queue has been reached and still not found goal state
+    print("The search algorithm expanded a total of", expanded_nodes, "nodes")
+    print("The maximum number of nodes in the queue at one time is", maximum_nodes)
+    return None
 
 # A* with the Misplaced Tile heuristic
 def algo_2(puzzle):
