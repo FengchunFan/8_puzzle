@@ -98,19 +98,13 @@ def algo_1(puzzle):
     q = PriorityQueue()  #create priority queue
     q.put(start_node) #add start_node to the start of the priority queue
     visited_node = [] #add a array to store visited nodes
-    
-    #test purpose
-    new_puzzle = zero_left(puzzle)
-    second_node = Node(new_puzzle, start_node, 1)
-    q.put(second_node)
-
-    new_new_puzzle = zero_left(new_puzzle)
-    third_node = Node(new_new_puzzle, second_node, 1)
-    q.put(third_node)
 
     while not q.empty(): 
-        print("q not empty")
-        print_puzzle(q.get().puzzle)
+        temp_puzzle = q.get().puzzle #get the puzzle from the node at starting of priority queue
+        print_puzzle(temp_puzzle)
+        if(puzzle == goal):
+            print("Goal state was reached")
+            return None #break out of the loop
     print("Goal state could not be reached.") #end of the queue has been reached and still not found goal state
 
 # A* with the Misplaced Tile heuristic
