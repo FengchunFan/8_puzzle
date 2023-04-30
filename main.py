@@ -11,13 +11,14 @@ import copy
 
 # define a Node class to keep track of path used, should have a type puzzle and a node pointer
 class Node:
-    def __init__(self, puzzle, parent, cost):
+    def __init__(self, puzzle, parent, gcost, hcost):
         self.puzzle = puzzle
         self.parent = parent
-        self.cost = cost
+        self.gcost = gcost
+        self.hcost = hcost
 
     def __lt__(self, other): # very very important, used for comparison for the priority queue, lower cost = higher priority
-        return self.cost < other.cost
+        return (self.gcost + self.hcost) < (other.gcost + other.hcost)
 
 # default 3 x 3 puzzle
 def print_puzzle(puzzle):
@@ -104,14 +105,14 @@ def print_path(node):
     print("The depth of the goal node was:", len(path)-1) #depth start with first expansion, -1 for initial puzzle
 
 
-# Uniform Cost Search: expanding cheapest cost node, depends on g(n) only
+# Uniform Cost Search: expanding cheapest cost node, depends on g(n) only, h(n) = 0
 # reference: https://www.geeksforgeeks.org/priority-queue-using-queue-and-heapdict-module-in-python/
 def algo_1(puzzle):
     print("You have chosen the Uniform Cost Search algorithm")
     maximum_nodes = 0 #maximum nodes in q at 1 time
     expanded_nodes = 0 #total nodes expanded
     goal = [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '0']] #set the goal state
-    start_node = Node(puzzle, None, 0) #use the input puzzle to initialize the start node
+    start_node = Node(puzzle, None, 0, 0) #use the input puzzle to initialize the start node
     q = PriorityQueue()  #create priority queue
     q.put(start_node) #add start_node to the start of the priority queue
     visited_node = [] #add a array to store visited nodes
@@ -121,6 +122,8 @@ def algo_1(puzzle):
             maximum_nodes = q.qsize()
         temp_node = q.get() #get the first node off priority queue
         temp_puzzle = temp_node.puzzle #get the puzzle from the node at starting of priority queue
+        #uncomment to see the process
+        #print("The best state to expand with g(n) =", temp_node.gcost)
         #print_puzzle(temp_puzzle)
         if(temp_puzzle == goal): #check if is goal
             print("Goal state was reached")
@@ -133,7 +136,7 @@ def algo_1(puzzle):
             if moves != temp_puzzle: #if there is update in the puzzle, i.e: move is valid
                 if moves not in visited_node:
                     expanded_nodes += 1
-                    curr_node = Node(moves, temp_node, temp_node.cost + 1)
+                    curr_node = Node(moves, temp_node, temp_node.gcost + 1, temp_node.hcost)
                     q.put(curr_node)
                     visited_node.append(moves)
 
