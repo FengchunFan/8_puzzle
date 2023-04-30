@@ -26,6 +26,7 @@ def print_puzzle(puzzle):
             print(puzzle[i][j], end = " ") #use end = " " to prevent duplicated newlines
         print() #newline
 
+# support function for customized puzzle
 def get_row(row_input):
     row = []
     for index in row_input:
@@ -96,12 +97,13 @@ def print_path(node):
         path.append(temp_node.puzzle)
         temp_node = temp_node.parent
     path.reverse() #need to reverse order to display start -> goal
+    print("======================================================")
     for puzzles in path:
         print_puzzle(puzzles)
-        print() #leave a blank space
+        print("======================================================") #puzzle separater
 
 
-# Uniform Cost Search
+# Uniform Cost Search: expanding cheapest cost node, depends on g(n) only
 # reference: https://www.geeksforgeeks.org/priority-queue-using-queue-and-heapdict-module-in-python/
 def algo_1(puzzle):
     print("You have chosen the Uniform Cost Search algorithm")
