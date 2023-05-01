@@ -115,7 +115,7 @@ def print_path(node):
 #return h(n) calculated from misplaced tile
 def misplace_tile_score(puzzle, goal):
     total = 0
-    for digit in range(0,8):
+    for digit in range(9):
         i_p, j_p = find_digit(puzzle,str(digit))
         i_g, j_g = find_digit(goal,str(digit))
         temp = abs(i_p - i_g) + abs(j_p - j_g)
@@ -124,7 +124,7 @@ def misplace_tile_score(puzzle, goal):
 
 def Euclidean_Distance(puzzle, goal):
     total = 0
-    for digit in range(0,8):
+    for digit in range(9):
         i_p, j_p = find_digit(puzzle,str(digit))
         i_g, j_g = find_digit(goal,str(digit))
         temp = math.sqrt((i_p - i_g)**2 + (j_p - j_g)**2)
@@ -177,7 +177,8 @@ def algo_2(puzzle):
     maximum_nodes = 0 #maximum nodes in q at 1 time
     expanded_nodes = 0 #total nodes expanded
     goal = [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '0']] #set the goal state
-    start_node = Node(puzzle, None, 0, 0) #use the input puzzle to initialize the start node
+    first_h_n = misplace_tile_score(puzzle, goal)
+    start_node = Node(puzzle, None, 0, first_h_n) #use the input puzzle to initialize the start node
     q = PriorityQueue()  #create priority queue
     q.put(start_node) #add start_node to the start of the priority queue
     visited_node = [] #add a array to store visited nodes
@@ -201,8 +202,8 @@ def algo_2(puzzle):
             if moves != temp_puzzle: #if there is update in the puzzle, i.e: move is valid
                 if moves not in visited_node:
                     expanded_nodes += 1
-                    h_n = misplace_tile_score(temp_puzzle, goal)
-                    curr_node = Node(moves, temp_node, temp_node.gcost + 1, temp_node.hcost + h_n)
+                    h_n = misplace_tile_score(moves, goal)
+                    curr_node = Node(moves, temp_node, temp_node.gcost + 1, h_n)
                     q.put(curr_node)
                     visited_node.append(moves)
 
@@ -217,7 +218,8 @@ def algo_3(puzzle):
     maximum_nodes = 0 #maximum nodes in q at 1 time
     expanded_nodes = 0 #total nodes expanded
     goal = [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '0']] #set the goal state
-    start_node = Node(puzzle, None, 0, 0) #use the input puzzle to initialize the start node
+    first_h_n = Euclidean_Distance(puzzle, goal)
+    start_node = Node(puzzle, None, 0, first_h_n) #use the input puzzle to initialize the start node
     q = PriorityQueue()  #create priority queue
     q.put(start_node) #add start_node to the start of the priority queue
     visited_node = [] #add a array to store visited nodes
@@ -241,8 +243,8 @@ def algo_3(puzzle):
             if moves != temp_puzzle: #if there is update in the puzzle, i.e: move is valid
                 if moves not in visited_node:
                     expanded_nodes += 1
-                    h_n = Euclidean_Distance(temp_puzzle, goal)
-                    curr_node = Node(moves, temp_node, temp_node.gcost + 1, temp_node.hcost + h_n)
+                    h_n = Euclidean_Distance(moves, goal)
+                    curr_node = Node(moves, temp_node, temp_node.gcost + 1, h_n)
                     q.put(curr_node)
                     visited_node.append(moves)
 
