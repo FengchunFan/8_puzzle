@@ -119,8 +119,8 @@ def misplace_tile_score(puzzle, goal):
     for digit in range(9):
         i_p, j_p = find_digit(puzzle,str(digit))
         i_g, j_g = find_digit(goal,str(digit))
-        temp = abs(i_p - i_g) + abs(j_p - j_g)
-        total += temp
+        if i_p != i_g or j_p != j_g:
+            total = total + 1
     return total
 
 def Euclidean_Distance(puzzle, goal):
