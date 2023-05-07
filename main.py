@@ -9,6 +9,7 @@
 from queue import PriorityQueue #essential for algorithms
 import copy
 import math #for euclidean distance
+import sys
 
 # define a Node class to keep track of path used, should have a type puzzle and a node pointer
 class Node:
@@ -141,7 +142,8 @@ def algo_1(puzzle):
     start_node = Node(puzzle, None, 0, 0) #use the input puzzle to initialize the start node
     q = PriorityQueue()  #create priority queue
     q.put(start_node) #add start_node to the start of the priority queue
-    visited_node = [] #add a array to store visited nodes
+    visited_puzzle = [] #add a array to store visited puzzles
+    visited_puzzle.append(puzzle)
 
     while not q.empty(): 
         if(q.qsize() > maximum_nodes):
@@ -160,11 +162,11 @@ def algo_1(puzzle):
         possible_moves = [zero_up(temp_puzzle), zero_down(temp_puzzle), zero_left(temp_puzzle), zero_right(temp_puzzle)] #4 operators
         for moves in possible_moves:
             if moves != temp_puzzle: #if there is update in the puzzle, i.e: move is valid
-                if moves not in visited_node:
+                if moves not in visited_puzzle:
                     expanded_nodes += 1
                     curr_node = Node(moves, temp_node, temp_node.gcost + 1, temp_node.hcost)
                     q.put(curr_node)
-                    visited_node.append(moves)
+                    visited_puzzle.append(moves)
 
     print("Goal state could not be reached.") #end of the queue has been reached and still not found goal state
     print("The search algorithm expanded a total of", expanded_nodes, "nodes")
@@ -181,7 +183,12 @@ def algo_2(puzzle):
     start_node = Node(puzzle, None, 0, first_h_n) #use the input puzzle to initialize the start node
     q = PriorityQueue()  #create priority queue
     q.put(start_node) #add start_node to the start of the priority queue
-    visited_node = [] #add a array to store visited nodes
+    visited_puzzle = [] #add a array to store visited puzzles
+    visited_puzzle.append(puzzle)
+    goal_nodes = [] #list of goal puzzles
+    goal_node = None
+    max = sys.maxsize
+    key = 1
 
     while not q.empty(): 
         if(q.qsize() > maximum_nodes):
@@ -192,20 +199,28 @@ def algo_2(puzzle):
         print("The best state to expand with g(n) =", temp_node.gcost, "and h(n) =", temp_node.hcost)
         print_puzzle(temp_puzzle)
         if(temp_puzzle == goal): #check if is goal
-            print("Goal state was reached")
-            print_path(temp_node)
-            print("The search algorithm expanded a total of", expanded_nodes, "nodes")
-            print("The maximum number of nodes in the queue at one time is", maximum_nodes)
-            return None #break out of the loop
-        possible_moves = [zero_up(temp_puzzle), zero_down(temp_puzzle), zero_left(temp_puzzle), zero_right(temp_puzzle)] #4 operators
-        for moves in possible_moves:
-            if moves != temp_puzzle: #if there is update in the puzzle, i.e: move is valid
-                if moves not in visited_node:
-                    expanded_nodes += 1
-                    h_n = misplace_tile_score(moves, goal)
-                    curr_node = Node(moves, temp_node, temp_node.gcost + 1, h_n)
-                    q.put(curr_node)
-                    visited_node.append(moves)
+            goal_nodes.append(temp_node)
+            key = 0
+        if key == 1:
+            possible_moves = [zero_up(temp_puzzle), zero_down(temp_puzzle), zero_left(temp_puzzle), zero_right(temp_puzzle)] #4 operators
+            for moves in possible_moves:
+                if moves != temp_puzzle: #if there is update in the puzzle, i.e: move is valid
+                    if moves not in visited_puzzle:
+                        expanded_nodes += 1
+                        h_n = misplace_tile_score(moves, goal)
+                        curr_node = Node(moves, temp_node, temp_node.gcost + 1, h_n)
+                        q.put(curr_node)
+                        visited_puzzle.append(moves)
+
+    if(len(goal_nodes) != 0):
+        for i in range (len(goal_nodes)):
+            if goal_nodes[i].gcost < max:
+                goal_node = goal_nodes[i]
+        print("Goal state was reached")
+        print_path(goal_node)
+        print("The search algorithm expanded a total of", expanded_nodes, "nodes")
+        print("The maximum number of nodes in the queue at one time is", maximum_nodes)
+        return None
 
     print("Goal state could not be reached.") #end of the queue has been reached and still not found goal state
     print("The search algorithm expanded a total of", expanded_nodes, "nodes")
@@ -214,15 +229,20 @@ def algo_2(puzzle):
 
 # A* with the Euclidean distance heuristic, similar to algo 2, just change the h(n) function
 def algo_3(puzzle):
-    print("You have chosen the A* with the Euclidean distance heuristic algorithm")
+    print("You have chosen the A* with the Misplaced Tile heuristic algorithm")
     maximum_nodes = 0 #maximum nodes in q at 1 time
     expanded_nodes = 0 #total nodes expanded
     goal = [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '0']] #set the goal state
-    first_h_n = Euclidean_Distance(puzzle, goal)
+    first_h_n = misplace_tile_score(puzzle, goal)
     start_node = Node(puzzle, None, 0, first_h_n) #use the input puzzle to initialize the start node
     q = PriorityQueue()  #create priority queue
     q.put(start_node) #add start_node to the start of the priority queue
-    visited_node = [] #add a array to store visited nodes
+    visited_puzzle = [] #add a array to store visited puzzles
+    visited_puzzle.append(puzzle)
+    goal_nodes = [] #list of goal puzzles
+    goal_node = None
+    max = sys.maxsize
+    key = 1
 
     while not q.empty(): 
         if(q.qsize() > maximum_nodes):
@@ -233,20 +253,28 @@ def algo_3(puzzle):
         print("The best state to expand with g(n) =", temp_node.gcost, "and h(n) =", temp_node.hcost)
         print_puzzle(temp_puzzle)
         if(temp_puzzle == goal): #check if is goal
-            print("Goal state was reached")
-            print_path(temp_node)
-            print("The search algorithm expanded a total of", expanded_nodes, "nodes")
-            print("The maximum number of nodes in the queue at one time is", maximum_nodes)
-            return None #break out of the loop
-        possible_moves = [zero_up(temp_puzzle), zero_down(temp_puzzle), zero_left(temp_puzzle), zero_right(temp_puzzle)] #4 operators
-        for moves in possible_moves:
-            if moves != temp_puzzle: #if there is update in the puzzle, i.e: move is valid
-                if moves not in visited_node:
-                    expanded_nodes += 1
-                    h_n = Euclidean_Distance(moves, goal)
-                    curr_node = Node(moves, temp_node, temp_node.gcost + 1, h_n)
-                    q.put(curr_node)
-                    visited_node.append(moves)
+            goal_nodes.append(temp_node)
+            key = 0
+        if key == 1:
+            possible_moves = [zero_up(temp_puzzle), zero_down(temp_puzzle), zero_left(temp_puzzle), zero_right(temp_puzzle)] #4 operators
+            for moves in possible_moves:
+                if moves != temp_puzzle: #if there is update in the puzzle, i.e: move is valid
+                    if moves not in visited_puzzle:
+                        expanded_nodes += 1
+                        h_n = Euclidean_Distance(moves, goal)
+                        curr_node = Node(moves, temp_node, temp_node.gcost + 1, h_n)
+                        q.put(curr_node)
+                        visited_puzzle.append(moves)
+
+    if(len(goal_nodes) != 0):
+        for i in range (len(goal_nodes)):
+            if goal_nodes[i].gcost < max:
+                goal_node = goal_nodes[i]
+        print("Goal state was reached")
+        print_path(goal_node)
+        print("The search algorithm expanded a total of", expanded_nodes, "nodes")
+        print("The maximum number of nodes in the queue at one time is", maximum_nodes)
+        return None
 
     print("Goal state could not be reached.") #end of the queue has been reached and still not found goal state
     print("The search algorithm expanded a total of", expanded_nodes, "nodes")
