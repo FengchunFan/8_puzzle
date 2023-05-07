@@ -196,10 +196,14 @@ def algo_2(puzzle):
         temp_node = q.get() #get the first node off priority queue
         temp_puzzle = temp_node.puzzle #get the puzzle from the node at starting of priority queue
         #uncomment to see the process
-        print("The best state to expand with g(n) =", temp_node.gcost, "and h(n) =", temp_node.hcost)
+        if(key == 1):
+            print("The best state to expand with g(n) =", temp_node.gcost, "and h(n) =", temp_node.hcost)
+        elif(key == 0):
+            print("The best state to check with g(n) =", temp_node.gcost, "and h(n) =", temp_node.hcost)
         print_puzzle(temp_puzzle)
         if(temp_puzzle == goal): #check if is goal
             goal_nodes.append(temp_node)
+            print("first goal state reached")
             key = 0
         if key == 1:
             possible_moves = [zero_up(temp_puzzle), zero_down(temp_puzzle), zero_left(temp_puzzle), zero_right(temp_puzzle)] #4 operators
@@ -250,10 +254,14 @@ def algo_3(puzzle):
         temp_node = q.get() #get the first node off priority queue
         temp_puzzle = temp_node.puzzle #get the puzzle from the node at starting of priority queue
         #uncomment to see the process
-        print("The best state to expand with g(n) =", temp_node.gcost, "and h(n) =", temp_node.hcost)
+        if(key == 1):
+            print("The best state to expand with g(n) =", temp_node.gcost, "and h(n) =", temp_node.hcost)
+        elif(key == 0):
+            print("The best state to check with g(n) =", temp_node.gcost, "and h(n) =", temp_node.hcost)
         print_puzzle(temp_puzzle)
         if(temp_puzzle == goal): #check if is goal
             goal_nodes.append(temp_node)
+            print("first goal state reached")
             key = 0
         if key == 1:
             possible_moves = [zero_up(temp_puzzle), zero_down(temp_puzzle), zero_left(temp_puzzle), zero_right(temp_puzzle)] #4 operators
